@@ -318,19 +318,18 @@ impl<'a, T: 'a + MemoryView> Oven<'a, T> {
 
         sp -= self.arch.ptr_size() as u64;
 
-        match self.arch.unicorn_mode() {
-            unicorn_const::Mode::MODE_32 => {
-                let value32 = value as u32;
-                self.unicorn
-                    .mem_write(sp, value32.as_bytes())
-                    .map_err(|_| "unable to write memory at sp")?;
-            }
-            unicorn_const::Mode::MODE_64 => {
-                self.unicorn
-                    .mem_write(sp, value.as_bytes())
-                    .map_err(|_| "unable to write memory at sp")?;
-            }
-            _ => unreachable!("invalid architecture"),
+        let mode = self.arch.unicorn_mode();
+        if mode.contains(unicorn_const::Mode::MODE_32) {
+            let value32 = value as u32;
+            self.unicorn
+                .mem_write(sp, value32.as_bytes())
+                .map_err(|_| "unable to write memory at sp")?;
+        } else if mode.contains(unicorn_const::Mode::MODE_64) {
+            self.unicorn
+                .mem_write(sp, value.as_bytes())
+                .map_err(|_| "unable to write memory at sp")?;
+        } else {
+            unreachable!("invalid architecture");
         }
 
         self.unicorn
