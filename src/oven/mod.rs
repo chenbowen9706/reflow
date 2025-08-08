@@ -209,6 +209,22 @@ impl<'a, T: 'a + MemoryView> Oven<'a, T> {
                 .add_code_hook(1, 0, move |uc, addr, size| {
                     let instructions = uc.mem_read_as_vec(addr, size as usize).unwrap();
                     let result = cs.disasm_all(&instructions, addr).unwrap();
+                    let rax = uc.reg_read(RegisterX86::RAX).unwrap();
+                    let rbx = uc.reg_read(RegisterX86::RBX).unwrap();
+                    let rcx = uc.reg_read(RegisterX86::RCX).unwrap();
+                    let rdx = uc.reg_read(RegisterX86::RDX).unwrap();
+                    let r8 = uc.reg_read(RegisterX86::R8).unwrap();
+                    let r9 = uc.reg_read(RegisterX86::R9).unwrap();
+                    let r13 = uc.reg_read(RegisterX86::R13).unwrap();
+                    let r15 = uc.reg_read(RegisterX86::R15).unwrap();
+                    let rdi = uc.reg_read(RegisterX86::RDI).unwrap();
+                    let rsi = uc.reg_read(RegisterX86::RSI).unwrap();
+                    let rsp = uc.reg_read(RegisterX86::RSP).unwrap();
+                    let xmm3 = uc.reg_read(RegisterX86::XMM3).unwrap();
+                    let xmm0 = uc.reg_read(RegisterX86::XMM0).unwrap();
+                    let xmm14 = uc.reg_read(RegisterX86::XMM14).unwrap();
+                    let ymm15 = uc.reg_read(RegisterX86::YMM15).unwrap();
+                    debug!("rax:{:x} rbx:{:x} rcx:{:x} rdx:{:x} r8:{:x} r9:{:x} r13:{:x} r15:{:x} rdi:{:x} rsi:{:x} rsp:{:x} xmm3:{:x} xmm0:{:x} xmm14:{:x} ymm15:{:x}", rax,rbx,rcx,rdx,r8,r9,r13,r15,rdi,rsi,rsp,xmm3,xmm0,xmm14,ymm15);
                     debug!("{}", result.to_string().trim_end());
                 })
                 .map_err(|_| "unable to create unicorn code hook".to_string())?;
