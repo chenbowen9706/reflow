@@ -215,6 +215,7 @@ impl<'a, T: 'a + MemoryView> Oven<'a, T> {
                     let rdx = uc.reg_read(RegisterX86::RDX).unwrap();
                     let r8 = uc.reg_read(RegisterX86::R8).unwrap();
                     let r9 = uc.reg_read(RegisterX86::R9).unwrap();
+                    let r10 = uc.reg_read(RegisterX86::R10).unwrap();
                     let r13 = uc.reg_read(RegisterX86::R13).unwrap();
                     let r15 = uc.reg_read(RegisterX86::R15).unwrap();
                     let rdi = uc.reg_read(RegisterX86::RDI).unwrap();
@@ -224,7 +225,7 @@ impl<'a, T: 'a + MemoryView> Oven<'a, T> {
                     let xmm0 = uc.reg_read(RegisterX86::XMM0).unwrap();
                     let xmm14 = uc.reg_read(RegisterX86::XMM14).unwrap();
                     let ymm15 = uc.reg_read(RegisterX86::YMM15).unwrap();
-                    debug!("rax:{:x} rbx:{:x} rcx:{:x} rdx:{:x} r8:{:x} r9:{:x} r13:{:x} r15:{:x} rdi:{:x} rsi:{:x} rsp:{:x} xmm3:{:x} xmm0:{:x} xmm14:{:x} ymm15:{:x}", rax,rbx,rcx,rdx,r8,r9,r13,r15,rdi,rsi,rsp,xmm3,xmm0,xmm14,ymm15);
+                    debug!("rax:{:x} rbx:{:x} rcx:{:x} rdx:{:x} r8:{:x} r9:{:x} r10:{:x} r13:{:x} r15:{:x} rdi:{:x} rsi:{:x} rsp:{:x} xmm3:{:x} xmm0:{:x} xmm14:{:x} ymm15:{:x}", rax,rbx,rcx,rdx,r8,r9,r10,r13,r15,rdi,rsi,rsp,xmm3,xmm0,xmm14,ymm15);
                     debug!("{}", result.to_string().trim_end());
                 })
                 .map_err(|_| "unable to create unicorn code hook".to_string())?;
