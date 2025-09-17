@@ -187,6 +187,14 @@ impl<'a, T: 'a + MemoryView> Oven<'a, T> {
         )
     }
 
+    pub fn mem_read(&self, address: u64, bytes: &mut [u8]) -> Result<()> {
+        self.unicorn
+            .mem_read(address, &mut bytes)
+            .map_err(|_| "unable to read memory")?;
+
+        Ok(())
+    }
+
     // TODO: more helper functions
 
     fn finalize_stack(&mut self) -> Result<()> {
