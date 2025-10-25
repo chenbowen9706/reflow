@@ -238,6 +238,21 @@ impl<'a, T: 'a + MemoryView> Oven<'a, T> {
                 })
                 .map_err(|_| "unable to create unicorn code hook".to_string())?;
         }
+	self.unicorn
+                .add_insn_invalid_hook(move |uc| {
+                    let mut rip = uc.reg_read(RegisterX86::RIP).unwrap();
+                    debug!("insn:{:x}", rip);
+		    let ymm15 = uc.reg_read(RegisterX86::YMM15).unwrap();
+		    if ymm15!=0 {
+		    	rip+=0x6;
+		    	rip+=0x7;
+		    	uc.reg_write(RegisterX86::RDI,ymm15).unwrap();
+		    	uc.reg_write(RegisterX86::RIP,rip).unwrap();
+		    	return true;
+		    }
+		    false
+                })
+                .map_err(|_| "unable to create unicorn code hook".to_string())?;
 
         // fetch prot hook
         // TODO: implement real protection from memory
